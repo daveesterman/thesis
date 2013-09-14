@@ -44,7 +44,7 @@ class Filter:
         for item in self.data[user1]:
             if item in self.data[user2]:
                 shared.append(item)
-        if len(shared)==0: return 0
+        if len(shared)==0: return None
         
         # Create array for each user of their values for each preference item
         # they have in common.
