@@ -6,12 +6,15 @@ Created on Sep 11, 2013
 
 import numpy as np
 
+data = "data"
+
 class Filter:
     '''
     classdocs
     '''
     
-    data = None
+#     global data 
+#     data = None
     scorer = None
 
     def __init__(self, data, scorer):
@@ -20,6 +23,9 @@ class Filter:
         '''
         self.data = data
         self.scorer = scorer
+        
+    def getData(self):
+        return data
         
     def computeScoreTwo(self, user1, user2):
         '''Compute the similarity score between user1 and user2.
