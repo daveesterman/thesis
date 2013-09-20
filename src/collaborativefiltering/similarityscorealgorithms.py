@@ -24,6 +24,17 @@ class EuclidianDistance:
     def score(self, vec1, vec2):
         '''Calculate similarity score between user 1 and user 2.
         
+        Vectors must have all the same "components".  This means that we are
+        comparing two users only on the items for which they both have a valid
+        preference.  For example,
+        
+        if user1's vector = [4x, 5y, 6z],and 
+           user2's vector = [10y, 15z], then   
+           vec1 = [5y, 6z], and
+           vec2 = [10y, 15z]
+        because although user1 has a valid preference for x, user2 does not.
+        
+        
         Arguments:
         vec1 -- numpy array representing user 1's position in preference space
         vec2 -- numpy array representing user 2's position in preference space
