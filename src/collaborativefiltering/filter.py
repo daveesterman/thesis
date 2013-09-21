@@ -6,26 +6,24 @@ Created on Sep 11, 2013
 
 import numpy as np
 
-data = "data"
-
 class Filter:
     '''
     classdocs
     '''
     
-#     global data 
-#     data = None
-    scorer = None
-
     def __init__(self, data, scorer):
         '''
-        Constructor
+        Create Filter object.
+        
+        Arguments:
+            data    dataset to be filtered
+            scorer  Algorithm for determining similarity scores
         '''
         self.data = data
         self.scorer = scorer
         
     def getData(self):
-        return data
+        return self.data
         
     def computeScoreTwo(self, user1, user2):
         '''Compute the similarity score between user1 and user2.
@@ -60,3 +58,33 @@ class Filter:
         # Compute the score for these two users.
         return self.scorer.score(vec1, vec2)
         
+    def getRecommendations(self, user):
+        '''Get an ordered list of recommendations for a user
+        
+        Arguments:
+            user    The user for which to generate recommendations
+            
+        Return:
+            A list of tuples.  Each tuple will contain an item and its
+            predicted rating for the given user.  The tuples will be ordered
+            by predicted rating with the highest recommendation as list item 0
+        '''
+        pass
+    
+    def getWeightedItemScore(self, user1, user2, item): 
+        '''
+        Get a weighted score for an item based on the similarity of two users.
+        
+        Arguments:
+            user1   The user who needs recommendations
+            user2   The user whose rating will be weighted by similarity
+            item    The item whose weighted score will be determined
+        
+        Return:
+            float   weighted score
+        '''
+        
+        simScore = self.computeScoreTwo(user1, user2)
+        user2ItemRating = self.data[user2][item]
+        weightedScore = simScore * user2ItemRating
+        return weightedScore

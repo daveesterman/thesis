@@ -52,3 +52,9 @@ class EuclidianDistance:
         zeroToOne = 1.0 / (1.0 + d)
         score = (zeroToOne - 0.5) * 2
         return score
+    
+class EuclidPCI:
+    def score(self, vec1, vec2):
+        d = LA.norm(vec1 - vec2)
+        score = 1.0 / (1.0 + d*d)
+        return score

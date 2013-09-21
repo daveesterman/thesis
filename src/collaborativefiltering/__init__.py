@@ -6,7 +6,7 @@ Created on Sep 10, 2013
 
 import numpy as np
 from collaborativefiltering.filter import Filter
-from collaborativefiltering.similarityscorealgorithms import EuclidianDistance
+from collaborativefiltering.similarityscorealgorithms import *
 
 if __name__ == '__main__':
 
@@ -17,8 +17,7 @@ if __name__ == '__main__':
         dat = eval(a_file.read())
 
     f = Filter(dat, EuclidianDistance())
+    fPCI = Filter(dat, EuclidPCI())
 
-    print(f.computeScoreTwo('Lisa Rose', 'Jack Matthews'))
-    print(f.computeScoreTwo('Lisa Rose', 'Gene Seymour'))
-#     print(f.data)
-#     print(f.getData())
+    print("Rose v Seymour w/ PCI Euclid:  ", fPCI.computeScoreTwo('Lisa Rose', 'Gene Seymour'))
+    print(f.getWeightedItemScore("Toby", "Lisa Rose", "The Night Listener"))
