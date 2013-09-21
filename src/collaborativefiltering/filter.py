@@ -22,9 +22,6 @@ class Filter:
         self.data = data
         self.scorer = scorer
         
-    def getData(self):
-        return self.data
-        
     def computeScoreTwo(self, user1, user2):
         '''Compute the similarity score between user1 and user2.
         
@@ -66,10 +63,27 @@ class Filter:
             
         Return:
             A list of tuples.  Each tuple will contain an item and its
-            predicted rating for the given user.  The tuples will be ordered
+            predicted rating for the given usvalider.  The tuples will be ordered
             by predicted rating with the highest recommendation as list item 0
         '''
-        pass
+        # Get a set of all possible items
+        itemsWithDups = []
+        for aUser in self.data:
+            for item in self.data[aUser]:
+                itemsWithDups.append(item)
+        allItems = set(itemsWithDups)
+        
+        # Create the list of tuples
+        unsortedRecs = []
+        for item in allItems:
+            # only want to recommend items unkown to user
+            if item not in self.data[user]:
+                unsortedRecs.append((item, 
+                             self.getNormalizedTotalWeightedItemScore(user, 
+                                                                      item)))
+        recs = sorted(unsortedRecs, key=lambda rec: rec[1])
+        recs.reverse()
+        return recs
     
     def getWeightedItemScore(self, user1, user2, item): 
         '''
@@ -88,3 +102,31 @@ class Filter:
         user2ItemRating = self.data[user2][item]
         weightedScore = simScore * user2ItemRating
         return weightedScore
+    
+    def getNormalizedTotalWeightedItemScore(self, user1, item):
+        '''
+        Get the normalized total weighted score for an item.
+        
+        Arguments:
+            user1   The user who needs recommendations
+            item    The item whose normalized score will be determined
+        
+        Return:
+            float   The normalized weighted score for item
+        '''
+        
+        # Get a list of all the users except user1
+        otherUsers = list(self.data.keys())
+        otherUsers.remove(user1)
+
+        # For each of the other users who has a valid score for item, get
+        # their weighted score for item and add to the total, then divide
+        # that total by the total similarity of those users to user1.
+        total    = 0
+        simTotal = 0
+        for user in otherUsers:
+            if item in self.data[user]:
+                total += self.getWeightedItemScore(user1, user, item)
+                simTotal += self.computeScoreTwo(user1, user)
+                
+        return total/simTotal
