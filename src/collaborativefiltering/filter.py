@@ -63,7 +63,7 @@ class Filter:
             
         Return:
             A list of tuples.  Each tuple will contain an item and its
-            predicted rating for the given usvalider.  The tuples will be ordered
+            predicted rating for the given user.  The tuples will be ordered
             by predicted rating with the highest recommendation as list item 0
         '''
         # Get a set of all possible items

@@ -21,8 +21,8 @@ if __name__ == '__main__':
 
 #     print("Rose v Seymour w/ PCI Euclid:  ", fPCI.computeScoreTwo('Lisa Rose', 'Gene Seymour'))
 #     print(f.getWeightedItemScore("Toby", "Lisa Rose", "The Night Listener"))
-    print(f.getNormalizedTotalWeightedItemScore("Toby", "The Night Listener"))
-    print(f.getNormalizedTotalWeightedItemScore("Toby", "Lady in the Water"))
-    print(f.getNormalizedTotalWeightedItemScore("Toby", "Just My Luck"))
+#     print(f.getNormalizedTotalWeightedItemScore("Toby", "The Night Listener"))
+#     print(f.getNormalizedTotalWeightedItemScore("Toby", "Lady in the Water"))
+#     print(f.getNormalizedTotalWeightedItemScore("Toby", "Just My Luck"))
     for item in f.getRecommendations("Toby"):
         print(item)
