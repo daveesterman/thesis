@@ -22,11 +22,11 @@ class Filter:
         self.data = data
         self.scorer = scorer
         
-    def computeScoreTwo(self, user1, user2):
+    def computeSimilarityScore(self, user1, user2):
         '''Compute the similarity score between user1 and user2.
         
         Return:
-            float in the range [-1,1]
+            numpy.float64 in the range [-1,1]
                 (These values can only be compared to values calculated with
                 the same scorer.  The scores are not absolute.)
             None if the two users have no preferences in common
@@ -73,14 +73,15 @@ class Filter:
                 itemsWithDups.append(item)
         allItems = set(itemsWithDups)
         
-        # Create the list of tuples
+        # Get the recommendations
         unsortedRecs = []
         for item in allItems:
-            # only want to recommend items unkown to user
+            # only want to recommend items unknown to user
             if item not in self.data[user]:
                 unsortedRecs.append((item, 
                              self.getNormalizedTotalWeightedItemScore(user, 
                                                                       item)))
+        # Sort the recommendations
         recs = sorted(unsortedRecs, key=lambda rec: rec[1])
         recs.reverse()
         return recs
@@ -98,7 +99,7 @@ class Filter:
             float   weighted score
         '''
         
-        simScore = self.computeScoreTwo(user1, user2)
+        simScore = self.computeSimilarityScore(user1, user2)
         user2ItemRating = self.data[user2][item]
         weightedScore = simScore * user2ItemRating
         return weightedScore
@@ -127,6 +128,5 @@ class Filter:
         for user in otherUsers:
             if item in self.data[user]:
                 total += self.getWeightedItemScore(user1, user, item)
-                simTotal += self.computeScoreTwo(user1, user)
-                
+                simTotal += self.computeSimilarityScore(user1, user)
         return total/simTotal

@@ -40,21 +40,15 @@ class EuclidianDistance:
         vec2 -- numpy array representing user 2's position in preference space
         
         Return:
-        float -- a value in range [-1,1].  1 represents an exact match between the
-                 users in preference space.  Lesser values are worse 
-                 matches.
+        numpy.float64 -- a value in range (0,1].  1 represents an exact match
+                 between the users in preference space.  Lesser values are 
+                 worse matches.
                  
         '''
         
         # Calculate the norm of the element-wise difference between the 
         # vectors.  This is the distance between the points.
         d = LA.norm(vec1 - vec2)
-        zeroToOne = 1.0 / (1.0 + d)
-        score = (zeroToOne - 0.5) * 2
-        return score
-    
-class EuclidPCI:
-    def score(self, vec1, vec2):
-        d = LA.norm(vec1 - vec2)
+        # use d squared for compatibility with O'Reilly PCI
         score = 1.0 / (1.0 + d*d)
         return score
