@@ -123,10 +123,12 @@ class Filter:
         # For each of the other users who has a valid score for item, get
         # their weighted score for item and add to the total, then divide
         # that total by the total similarity of those users to user1.
+        # If user's similarity to user1 cannot be determined, skip user.
         total    = 0
         simTotal = 0
         for user in otherUsers:
-            if item in self.data[user]:
+            simScore = self.computeSimilarityScore(user1, user)
+            if (simScore != None) and (item in self.data[user]):
                 total += self.getWeightedItemScore(user1, user, item)
-                simTotal += self.computeSimilarityScore(user1, user)
+                simTotal += simScore
         return total/simTotal

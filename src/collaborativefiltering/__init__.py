@@ -5,8 +5,9 @@ Created on Sep 10, 2013
 '''
 
 import numpy as np
-from collaborativefiltering.filter import Filter
-from collaborativefiltering.similarityscorealgorithms import *
+from filter import Filter  # @UnresolvedImport
+from similarityscorealgorithms import *  # @UnresolvedImport
+from dataReader import *  # @UnresolvedImport
 
 if __name__ == '__main__':
 
@@ -20,3 +21,12 @@ if __name__ == '__main__':
 
     for item in f.getRecommendations("Toby"):
         print(item)
+        
+    rdr = DataReader()
+    movLens = rdr.convertMovieLens()
+    
+    movFilter = Filter(movLens, EuclidianDistance())
+    n=1
+    for item in movFilter.getRecommendations("1"):
+        print(n, "{:>80} {:.5f}".format(item[0],item[1]))
+        n+=1

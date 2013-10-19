@@ -15,7 +15,6 @@ class EuclidianDistance:
     classdocs
     '''
 
-
     def __init__(self):
         '''
         Constructor
