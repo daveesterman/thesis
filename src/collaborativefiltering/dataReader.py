@@ -34,3 +34,27 @@ class DataReader():
                     else:
                         dataSet[user] = {movies[item]:float(rating)} 
         return dataSet
+    
+    def transposeUsersWithItems(self, dat):
+        '''Transposes users with items for the data set
+        
+        Arguments
+            dat    The data set to be transposed.  The required format is a 
+                   dictionary
+                   {user1:{pref1:x, pref2:y},
+                    user2:{pref1:a, pref2:b}
+                   }
+                   users will be transposed with prefs.
+                   
+        Return
+            dict   transposed data set
+        '''
+        
+        transposedDat = {}
+        for person in dat:
+            for item in dat[person]:
+                transposedDat.setdefault(item, {})
+                transposedDat[item][person]=dat[person][item]
+        return transposedDat
+        
+        

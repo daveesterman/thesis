@@ -19,14 +19,22 @@ if __name__ == '__main__':
 
     f = Filter(dat, EuclidianDistance())
 
-    for item in f.getRecommendations("Toby"):
-        print(item)
+#     for item in f.getRecommendations("Toby"):
+#         print(item)
         
+    # MovieLens
     rdr = DataReader()
     movLens = rdr.convertMovieLens()
     
     movFilter = Filter(movLens, EuclidianDistance())
     n=1
-    for item in movFilter.getRecommendations("1"):
+#     for item in movFilter.getRecommendations("1"):
+#         print(n, "{:>80} {:.5f}".format(item[0],item[1]))
+#         n+=1
+        
+    # Item based filtering
+    movItems = rdr.transposeUsersWithItems(movLens)
+    itemFilter = Filter(movItems, EuclidianDistance())
+    for item in itemFilter.getRecommendations("Toy Story (1995)")[0:20]:
         print(n, "{:>80} {:.5f}".format(item[0],item[1]))
         n+=1
