@@ -55,6 +55,13 @@ class Filter:
         # Compute the score for these two users.
         return self.scorer.score(vec1, vec2)
         
+    def kNearestNeighbors(self, user, k):
+        scores = [(self.computeSimilarityScore(user, other), other)
+                            for other in self.data if (other!=user and
+                            self.computeSimilarityScore(user, other)!=None)]
+        scores.sort(reverse=True)
+        return scores[0:k]
+        
     def getRecommendations(self, user):
         '''Get an ordered list of recommendations for a user
         
