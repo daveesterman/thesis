@@ -11,13 +11,11 @@ from dataReader import *  # @UnresolvedImport
 
 if __name__ == '__main__':
 
-    dat = {}
+    rdr = DataReader()
 
-    # read data from file
-    with open('../../data/PCI.ch2.critics.txt', encoding='utf-8') as a_file:
-        dat = eval(a_file.read())
-
-    f = Filter(dat, EuclidianDistance())
+    # PCI example
+#     dat = rdr.pciExampleCritics()
+#     f = Filter(dat, EuclidianDistance())
 #     for neb in f.kNearestNeighbors("Toby", 12):
 #         print(neb)
 
@@ -25,15 +23,16 @@ if __name__ == '__main__':
 #         print(item)
         
     # MovieLens
-    rdr = DataReader()
     movLens = rdr.convertMovieLens()
     
     # User based filtering
-#     movFilter = Filter(movLens, EuclidianDistance())
-#     n=1
-#     for item in movFilter.getRecommendations("1"):
-#         print(n, "{:>80} {:.5f}".format(item[0],item[1]))
-#         n+=1
+    movFilter = Filter(movLens, EuclidianDistance())
+    n=1
+    for item in movFilter.getRecommendations("1"):
+        print(n, "{:>80} {:.5f}".format(item[0],item[1]))
+        n+=1
+        if n > 20:
+            break
         
     # Item based filtering
     n=1
@@ -43,5 +42,23 @@ if __name__ == '__main__':
 #         print(n, "{:>80} {:.5f}".format(item[0],item[1]))
 #         n+=1
 
-    for item in itemFilter.kNearestNeighbors("Toy Story (1995)", 2000):
-        print(item)
+#     for item in itemFilter.kNearestNeighbors("Toy Story (1995)", 2000):
+#         print(item)
+
+    itemSimData = itemFilter.getItemSimData(20)
+    print("The item data has built")
+    while(True):
+        bad = False
+        choice = input("x to exit, or choose a user (1-943)")
+        try:
+            choiceInt = int(choice)
+        except:
+            bad = True
+        if (choice == "x"): break
+        elif (bad or not 1<=choiceInt<=943):
+            print("bad choice!")
+            continue
+        else:
+            print(movFilter.getItemBasedRecs(itemSimData, choice))
+    
+    

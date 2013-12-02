@@ -61,6 +61,21 @@ class Filter:
                             self.computeSimilarityScore(user, other)!=None)]
         scores.sort(reverse=True)
         return scores[0:k]
+    
+    def getItemSimData(self,n=10):
+        # Create a dictionary of items showing which other items they
+        # are most similar to.
+        result={}
+
+        c=0
+        for item in self.data:
+            # Status updates for large datasets
+            c+=1
+            if c%100==0: print("{} / {}".format(c,len(self.data)))
+            # Find the most similar items to this one
+            scores=self.kNearestNeighbors(item, n)
+            result[item]=scores
+        return result
         
     def getRecommendations(self, user):
         '''Get an ordered list of recommendations for a user
@@ -92,6 +107,34 @@ class Filter:
         recs = sorted(unsortedRecs, key=lambda rec: rec[1])
         recs.reverse()
         return recs
+    
+    def getItemBasedRecs(self, itemSimData, user):
+        userRatings = self.data[user]
+        scores = {}
+        totalSim = {}
+        
+        # Loop over items rated by this user
+        for (item, rating) in userRatings.items():
+            # For items similar to this one
+            for (similarity, item2) in itemSimData[item]:
+                if item2 in userRatings: continue
+                
+                # Weighted sum of rating times similarity
+                scores.setdefault(item2, 0)
+                scores[item2]+=similarity*rating
+                
+                # Sum of all similarities
+                totalSim.setdefault(item2, 0)
+                totalSim[item2]+=similarity
+                
+        # Divide each total score by total weighting to get an average
+        rankings=[(score/totalSim[item],item) for item,score in scores.items( )]
+        
+        # Return the rankings from highest to lowest
+        rankings.sort( )
+        rankings.reverse( )
+        return rankings
+
     
     def getWeightedItemScore(self, user1, user2, item): 
         '''

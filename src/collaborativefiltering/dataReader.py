@@ -14,6 +14,15 @@ class DataReader():
         Constructor
         '''
         
+    def pciExampleCritics(self):
+        '''Reads the example critics from PCI and returns a data set'''
+        dat = {}
+
+        # read data from file
+        with open('../../data/PCI.ch2.critics.txt', encoding='utf-8') as a_file:
+            dat = eval(a_file.read())
+        return dat
+        
     def convertMovieLens(self):
         ''' Converts MovieLens data into correct format'''
         
