@@ -27,12 +27,14 @@ if __name__ == '__main__':
     
     # User based filtering
     movFilter = Filter(movLens, EuclidianDistance())
+    """
     n=1
     for item in movFilter.getRecommendations("1"):
         print(n, "{:>80} {:.5f}".format(item[0],item[1]))
         n+=1
         if n > 20:
             break
+            """
         
     # Item based filtering
     n=1
@@ -50,15 +52,17 @@ if __name__ == '__main__':
     while(True):
         bad = False
         choice = input("x to exit, or choose a user (1-943)")
+        numRecs = input("How many recommendations would you like?")
         try:
             choiceInt = int(choice)
+            numRecsInt = int(numRecs)
         except:
             bad = True
-        if (choice == "x"): break
-        elif (bad or not 1<=choiceInt<=943):
+        if (choice == "x" or numRecsInt == "x"): break
+        elif (bad or not 1<=choiceInt<=943 or not numRecsInt >= 0):
             print("bad choice!")
             continue
         else:
-            print(movFilter.getItemBasedRecs(itemSimData, choice))
+            print(movFilter.getItemBasedRecs(itemSimData, choice, numRecsInt))
     
     

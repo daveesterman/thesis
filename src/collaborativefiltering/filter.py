@@ -68,6 +68,7 @@ class Filter:
         result={}
 
         c=0
+        print("Creating item similarity dictionary...")
         for item in self.data:
             # Status updates for large datasets
             c+=1
@@ -108,7 +109,7 @@ class Filter:
         recs.reverse()
         return recs
     
-    def getItemBasedRecs(self, itemSimData, user):
+    def getItemBasedRecs(self, itemSimData, user, numRecs):
         userRatings = self.data[user]
         scores = {}
         totalSim = {}
@@ -133,7 +134,7 @@ class Filter:
         # Return the rankings from highest to lowest
         rankings.sort( )
         rankings.reverse( )
-        return rankings
+        return rankings[:numRecs]
 
     
     def getWeightedItemScore(self, user1, user2, item): 
