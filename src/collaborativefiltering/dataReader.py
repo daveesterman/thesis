@@ -43,27 +43,37 @@ class DataReader():
                     else:
                         dataSet[user] = {movies[item]:float(rating)} 
         return dataSet
-    
-    def transposeUsersWithItems(self, dat):
-        '''Transposes users with items for the data set
-        
-        Arguments
-            dat    The data set to be transposed.  The required format is a 
-                   dictionary
-                   {user1:{pref1:x, pref2:y},
-                    user2:{pref1:a, pref2:b}
-                   }
-                   users will be transposed with prefs.
-                   
-        Return
-            dict   transposed data set
+
+    def readFromFile(self, filePath):
         '''
+        Reads from a file to produce a data set for filtering.
         
-        transposedDat = {}
-        for person in dat:
-            for item in dat[person]:
-                transposedDat.setdefault(item, {})
-                transposedDat[item][person]=dat[person][item]
-        return transposedDat
+        Arguments: 
+            filePath
+                The file to be read.  Format of the file should be text with
+                each line containing one entry of the data set.  There must be
+                three columns, separated by whitespace, with data in order as:
+                
+                <user>    <item>    <rating>
+                <user>    <item>    <rating>
+                ...
+                
+                There is no required order from line to line.  In other words,
+                you don't need all entries for a single user to be on
+                consecutive lines, or all items for a single item.
         
-        
+        Return:
+            dictionary with format
+            {user1:{<item>:<rating>, <item>:<rating>},
+             user2:{<item>:<rating>, <item>:<rating>}
+             }
+          '''
+        dataSet = {}
+        with open(filePath, encoding="utf-8") as dataFile:
+            for line in dataFile:
+                (user, item, rating) = line.split()
+                if user in dataSet:
+                    dataSet[user][item] = float(rating)
+                else:
+                    dataSet[user] = {item:float(rating)} 
+            return dataSet

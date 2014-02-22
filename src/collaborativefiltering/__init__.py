@@ -8,10 +8,18 @@ import numpy as np
 from filter import Filter  # @UnresolvedImport
 from similarityscorealgorithms import *  # @UnresolvedImport
 from dataReader import *  # @UnresolvedImport
+from dataSet import *  # @UnresolvedImport
 
 if __name__ == '__main__':
 
     rdr = DataReader()
+    
+    # Check DataSet functionality
+    userFile = input("Where is your data?")
+    dat = DataSet(userFile)
+    print(dat)
+    dat.transposeUsersWithItems()
+    print(dat)
 
     # PCI example
 #     dat = rdr.pciExampleCritics()
