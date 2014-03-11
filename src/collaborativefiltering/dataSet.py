@@ -27,7 +27,7 @@ class DataSet():
         '''Transposes users with items for the data set
                    
         Return
-            None    Modifies attribute of instance
+            None    Modifies dat attribute of instance
         '''
         
         transposedDat = {}

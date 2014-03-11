@@ -7,6 +7,8 @@ Created on Sep 16, 2013
 class DataReader():
     '''
     Contains various readers for data sets in different formats.
+    
+    All public methods of this class should return a data set.
     '''
 
     def __init__(self):
@@ -71,7 +73,10 @@ class DataReader():
         dataSet = {}
         with open(filePath, encoding="utf-8") as dataFile:
             for line in dataFile:
-                (user, item, rating) = line.split()
+                try:
+                    (user, item, rating) = line.split()
+                except ValueError as e:
+                    print(e)
                 if user in dataSet:
                     dataSet[user][item] = float(rating)
                 else:

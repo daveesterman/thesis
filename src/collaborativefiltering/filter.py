@@ -11,7 +11,7 @@ class Filter:
     classdocs
     '''
     
-    def __init__(self, data, scorer):
+    def __init__(self, dataSet, scorer):
         '''
         Create Filter object.
         
@@ -19,7 +19,7 @@ class Filter:
             data    dataset to be filtered
             scorer  Algorithm for determining similarity scores
         '''
-        self.data = data
+        self.data = dataSet.dat
         self.scorer = scorer
         
     def computeSimilarityScore(self, user1, user2):
@@ -62,21 +62,7 @@ class Filter:
         scores.sort(reverse=True)
         return scores[0:k]
     
-    def getItemSimData(self,n=10):
-        # Create a dictionary of items showing which other items they
-        # are most similar to.
-        result={}
 
-        c=0
-        print("Creating item similarity dictionary...")
-        for item in self.data:
-            # Status updates for large datasets
-            c+=1
-            if c%100==0: print("{} / {}".format(c,len(self.data)))
-            # Find the most similar items to this one
-            scores=self.kNearestNeighbors(item, n)
-            result[item]=scores
-        return result
         
     def getRecommendations(self, user):
         '''Get an ordered list of recommendations for a user
