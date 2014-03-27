@@ -20,7 +20,10 @@ class DataSet():
         filePath    Path to file containing data to be used as the data set.
         '''
         self.reader = DataReader()
-        self.dat    = self.reader.readFromFile(filePath)
+        if filePath==None or filePath=='':
+            self.dat = self.reader.convertMovieLens()
+        else:
+            self.dat = self.reader.readFromFile(filePath)
         
         
     def transposeUsersWithItems(self):

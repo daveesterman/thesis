@@ -62,67 +62,6 @@ class Filter:
         scores.sort(reverse=True)
         return scores[0:k]
     
-
-        
-    def getRecommendations(self, user):
-        '''Get an ordered list of recommendations for a user
-        
-        Arguments:
-            user    The user for which to generate recommendations
-            
-        Return:
-            A list of tuples.  Each tuple will contain an item and its
-            predicted rating for the given user.  The tuples will be ordered
-            by predicted rating with the highest recommendation as list item 0
-        '''
-        # Get a set of all possible items
-        itemsWithDups = []
-        for aUser in self.data:
-            for item in self.data[aUser]:
-                itemsWithDups.append(item)
-        allItems = set(itemsWithDups)
-        
-        # Get the recommendations
-        unsortedRecs = []
-        for item in allItems:
-            # only want to recommend items unknown to user
-            if item not in self.data[user]:
-                unsortedRecs.append((item, 
-                             self.getNormalizedTotalWeightedItemScore(user, 
-                                                                      item)))
-        # Sort the recommendations
-        recs = sorted(unsortedRecs, key=lambda rec: rec[1])
-        recs.reverse()
-        return recs
-    
-    def getItemBasedRecs(self, itemSimData, user, numRecs):
-        userRatings = self.data[user]
-        scores = {}
-        totalSim = {}
-        
-        # Loop over items rated by this user
-        for (item, rating) in userRatings.items():
-            # For items similar to this one
-            for (similarity, item2) in itemSimData[item]:
-                if item2 in userRatings: continue
-                
-                # Weighted sum of rating times similarity
-                scores.setdefault(item2, 0)
-                scores[item2]+=similarity*rating
-                
-                # Sum of all similarities
-                totalSim.setdefault(item2, 0)
-                totalSim[item2]+=similarity
-                
-        # Divide each total score by total weighting to get an average
-        rankings=[(score/totalSim[item],item) for item,score in scores.items( )]
-        
-        # Return the rankings from highest to lowest
-        rankings.sort( )
-        rankings.reverse( )
-        return rankings[:numRecs]
-
-    
     def getWeightedItemScore(self, user1, user2, item): 
         '''
         Get a weighted score for an item based on the similarity of two users.

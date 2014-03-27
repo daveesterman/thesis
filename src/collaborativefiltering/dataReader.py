@@ -8,7 +8,7 @@ class DataReader():
     '''
     Contains various readers for data sets in different formats.
     
-    All public methods of this class should return a data set.
+    All public methods of this class should return a DataSet.
     '''
 
     def __init__(self):
@@ -76,7 +76,8 @@ class DataReader():
                 try:
                     (user, item, rating) = line.split()
                 except ValueError as e:
-                    print(e)
+#                     print(e)
+                    pass
                 if user in dataSet:
                     dataSet[user][item] = float(rating)
                 else:

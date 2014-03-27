@@ -5,6 +5,7 @@ Created on Mar 9, 2014
 '''
 
 from filter import Filter # @UnresolvedImport
+import copy
 
 class ItemBasedFilter(Filter):
     '''
@@ -16,6 +17,7 @@ class ItemBasedFilter(Filter):
         '''
         Constructor
         '''
+        self.origData = copy.deepcopy(dataSet.dat)
         dataSet.transposeUsersWithItems()
         super(ItemBasedFilter, self).__init__(dataSet, scorer)
         self.itemSimDict = self.getItemSimData()
@@ -42,4 +44,33 @@ class ItemBasedFilter(Filter):
             # Find the most similar items to this one
             scores=self.kNearestNeighbors(item, n)
             result[item]=scores
+        print("Item similarity dictionary created.")
         return result
+    
+    def getRecommendations(self, user, numRecs=None):
+        userRatings = self.origData[user]
+        scores = {}
+        totalSim = {}
+        
+        # Loop over items rated by this user
+        for (item, rating) in userRatings.items():
+            # For items similar to this one
+            for (similarity, item2) in self.itemSimDict[item]:
+                if item2 in userRatings: continue
+                
+                # Weighted sum of rating times similarity
+                scores.setdefault(item2, 0)
+                scores[item2]+=similarity*rating
+                
+                # Sum of all similarities
+                totalSim.setdefault(item2, 0)
+                totalSim[item2]+=similarity
+                
+        # Divide each total score by total weighting to get an average
+        rankings=[(item,score/totalSim[item]) for item,score in scores.items( )]
+        
+        # Return the rankings from highest to lowest
+        rankings.sort( )
+        rankings.reverse( )
+        return rankings[0:numRecs]
+    
