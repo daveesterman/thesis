@@ -67,10 +67,10 @@ class ItemBasedFilter(Filter):
                 totalSim[item2]+=similarity
                 
         # Divide each total score by total weighting to get an average
-        rankings=[(item,score/totalSim[item]) for item,score in scores.items( )]
+        Urankings=[(item,score/totalSim[item]) for item,score in scores.items( )]
         
         # Return the rankings from highest to lowest
-        rankings.sort( )
+        rankings = sorted(Urankings, key=lambda rec: rec[1])
         rankings.reverse( )
         return rankings[0:numRecs]
     
