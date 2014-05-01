@@ -23,6 +23,7 @@ class CommandLineInterface():
     filterType   = None
     filter       = None
     algorithm    = None
+    oldState = [dataLocation, filterType, algorithm]
     
     back         = None
     
@@ -31,16 +32,19 @@ class CommandLineInterface():
         Constructor
         '''
         self.MainMenu = {1:self.data, 2:self.userItem, 3:self.setAlgorithm,
-                         4:self.prepareFilter, 5:self.getRecs}
+                         4:self.investigateData}
         self.LoadData = {1:self.loadData}
         self.UserItem = {1:self.setUserBased, 2:self.setItemBased}
         self.Algorithm = {1:self.setEuclidian}
+        self.Investigate = {1:self.getRecs, 2:self.getKNearestNeighbors}
         self.back = self.mainMenu
         while(True):
             try:
                 self.back()
-            except Exception:
-                logging.exception("There's been a problem, try again:")
+            except Exception as e:
+                #logging.exception("There's been a problem, try again:")
+                print("There's been a problem:")
+                print(e)
                 input("Press Enter to continue")
                 continue
             except:
@@ -83,7 +87,7 @@ class CommandLineInterface():
 
     def mainMenu(self):
         choice = self.displayMenu(['Main Menu', 'Load Data', 'User/Item Based Filtering',
-                              'Algorithm', 'Prepare Filter', 'Get Recommendations'])
+                              'Algorithm', 'Investigate Data'])
         self.MainMenu[choice]()
         
     """ DATASET """        
@@ -125,13 +129,30 @@ class CommandLineInterface():
     
     def prepareFilter(self):
         self.filter = self.filterType(self.dataSet, self.algorithm)
-        self.back()
         
     """ INVESTIGATE """
+    
+    def investigateData(self):
+        newState = [self.dataLocation, self.filterType, self.algorithm]
+        for x in newState:
+            if x==None:
+                raise Exception("All filter attributes must be set!")
+        if newState != self.oldState:
+            self.prepareFilter()
+            self.oldState = newState
+        choice = self.displayMenu(['Investigate Data', 'Get recommendations for a user', 'Get k nearest neighbors to a user'])
+        self.Investigate[choice]()
     
     def getRecs(self):
         user = input('Choose a user to get recs for:')
         num  = int(input('How many recs would you like?'))
         print(self.filter.getRecommendations(user, num))
+        void = input('Press Enter to continue...')
+        self.back()
+        
+    def getKNearestNeighbors(self):
+        user = input('Choose a user whose neighbors to find:')
+        num  = int(input('Find how many neighbors?'))
+        print(self.filter.kNearestNeighbors(user,num))
         void = input('Press Enter to continue...')
         self.back()
